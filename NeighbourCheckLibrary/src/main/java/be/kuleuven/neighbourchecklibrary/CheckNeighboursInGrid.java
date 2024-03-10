@@ -14,9 +14,9 @@ public class CheckNeighboursInGrid {
 
         int[][] grid = {
                 {1,2,3,4,5,6,8,0,8,8},
-                {0,0,0,0,0,8,8,5,8,8},
-                {0,0,0,0,0,0,8,0,0,8},
-                {0,0,0,0,0,0,8,0,0,0},
+                {10,0,0,0,0,8,8,5,8,7},
+                {12,0,0,0,0,0,8,0,13,8},
+                {8,0,0,0,0,0,8,0,0,6},
                 {0,0,0,0,0,8,8,8,0,0}};
         ArrayList<Integer> arrayList = new ArrayList<>();
         for(int[] row : grid){
@@ -25,7 +25,7 @@ public class CheckNeighboursInGrid {
             }
         }
         System.out.println("start");
-        Iterable<Integer> result = getSameNeighboursIds(arrayList, 10, 5, 46);
+        Iterable<Integer> result = getSameNeighboursIds(arrayList, 10, 5, 20);
         System.out.println("stop");
     }
 
@@ -53,12 +53,11 @@ public class CheckNeighboursInGrid {
             if (indexToCheck == currentIndex) {
                 valueOnIndexToCheck = currentValue;
             }
-            for (short direction : new short[]{-1, 1}) {
+            for (byte direction : new byte[]{-1, 1}) {
                 boolean xNeighbour = currentIndex == indexToCheck + direction;
                 boolean yNeighbour = currentIndex == indexToCheck + direction * width;
-                boolean cornerNeighbour = xNeighbour && yNeighbour;
-                //ik veronderstel dat diagonaal niet word gezien als neighbour, anders kan deze bool gewoon weg
-                if (!cornerNeighbour && (xNeighbour || yNeighbour)) {
+                boolean notWrapping = currentIndex % width == indexToCheck % width + direction;
+                if (yNeighbour || (xNeighbour && notWrapping)) {
                     neighbours.put(currentIndex, currentValue);
                 }
             }
