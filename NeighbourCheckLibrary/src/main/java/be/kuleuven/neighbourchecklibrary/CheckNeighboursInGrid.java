@@ -17,22 +17,33 @@ public class CheckNeighboursInGrid {
      *@param indexToCheck - Specifies the index of the element which neighbours that need to be checked
      */
     public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid ,int width, int height, int indexToCheck){
+        //geen private helper functies want die zouden de grid size nodig hebben, die ik pas weet na het eind van de while.
+        //als ik hiervoor een aparte loop maak of de iterable omvorm naar array is het minder efficient.
         //hashmap: key=index, value=value
         final HashMap<Integer, Integer> neighbours = new HashMap<>();
-        int gridSize = 0;
+        int currentIndex = 0;
         //y neighbour = index +- width
         //x neighbour = index +- 1
         while(grid.iterator().hasNext()){
             final int currentValue = grid.iterator().next();
-
-            gridSize ++;
+            for(short direction : new short[]{-1, 1}){
+                boolean xNeighbour = currentIndex == indexToCheck + direction;
+                boolean yNeighbour = currentIndex == indexToCheck + direction * width;
+                boolean cornerNeighbour = xNeighbour && yNeighbour;
+                if(!cornerNeighbour && (xNeighbour || yNeighbour)){
+                    neighbours.put(currentIndex, currentValue);
+                }
+            }
+            currentIndex ++;
         }
         //error als dimenties niet kloppen
-        if(gridSize != width*height){   //current index = size van de grid na de while loop klaar is
-            throw new GridSizeNotMatchException(width, height, gridSize);
+        if(currentIndex != width*height){   //current index = size van de grid na de while loop klaar is
+            throw new GridSizeNotMatchException(width, height, currentIndex);
         }
-        //verwijder neighbours zonder zelfde waarde
+        //verwijder indexen zonder zelfde value of buiten grid size:
+
         return neighbours.keySet();
     }
+
 
 }
