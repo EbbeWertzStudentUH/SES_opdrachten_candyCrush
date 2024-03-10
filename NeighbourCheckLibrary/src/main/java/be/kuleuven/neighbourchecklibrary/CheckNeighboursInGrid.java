@@ -18,28 +18,19 @@ public class CheckNeighboursInGrid {
      *@param indexToCheck - Specifies the index of the element which neighbours that need to be checked
      */
     public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid ,int width, int height, int indexToCheck){
-        //(behalve de filter func) geen private helper functies want die zouden de grid size nodig hebben,
-        // die ik pas weet na het eind van de while.
-        //als ik hiervoor een aparte loop maak of de iterable omvorm naar array is het minder efficient.
         //hashmap: key=index, value=value
         final HashMap<Integer, Integer> neighbours = new HashMap<>();
         int currentIndex = 0;
         int valueOnIndexToCheck = 0;
-        //y neighbour = index +- width
-        //x neighbour = index +- 1
-        //iterator() kan niet tijdens loop ge-called want dat reset de interne cursor
+        final Coordinate coordOfIndexToCheck = new Coordinate(indexToCheck, width);
         for (int currentValue : grid) {
 
             if (indexToCheck == currentIndex) {
                 valueOnIndexToCheck = currentValue;
             }
-            for (byte direction : new byte[]{-1, 1}) {
-                boolean xNeighbour = currentIndex == indexToCheck + direction;
-                boolean yNeighbour = currentIndex == indexToCheck + direction * width;
-                boolean notWrapping = currentIndex % width == indexToCheck % width + direction;
-                if (yNeighbour || (xNeighbour && notWrapping)) {
-                    neighbours.put(currentIndex, currentValue);
-                }
+            final Coordinate currentCoord = new Coordinate(currentIndex, width);
+            if(currentCoord.isNeighbour(coordOfIndexToCheck)){
+                neighbours.put(currentIndex, currentValue);
             }
             currentIndex++;
         }
@@ -64,6 +55,23 @@ public class CheckNeighboursInGrid {
         }
         return result;
     }
+
+    private static class Coordinate{
+        protected int x;
+        protected int y;
+
+        protected Coordinate(int index, int width){
+            x = index % width;
+            y = index / width;
+        }
+        protected boolean isNeighbour(Coordinate coordinate){
+            int deltaX = Math.abs(coordinate.x - x);
+            int deltaY = Math.abs(coordinate.y - y);
+            boolean equal = deltaX == 0 && deltaY == 0;
+            return !equal && deltaY <= 1 && deltaX <= 1;
+        }
+    }
+
 
 
 }
