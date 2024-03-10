@@ -5,6 +5,7 @@ import be.kuleuven.neighbourchecklibrary.exceptions.GridSizeNotMatchException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 
 public class CheckNeighboursInGrid {
@@ -22,27 +23,43 @@ public class CheckNeighboursInGrid {
         //hashmap: key=index, value=value
         final HashMap<Integer, Integer> neighbours = new HashMap<>();
         int currentIndex = 0;
+        int valueOnIndexToCheck = 0;
         //y neighbour = index +- width
         //x neighbour = index +- 1
         while(grid.iterator().hasNext()){
             final int currentValue = grid.iterator().next();
+            if(indexToCheck == currentIndex){
+                valueOnIndexToCheck = currentValue;
+            }
             for(short direction : new short[]{-1, 1}){
                 boolean xNeighbour = currentIndex == indexToCheck + direction;
                 boolean yNeighbour = currentIndex == indexToCheck + direction * width;
                 boolean cornerNeighbour = xNeighbour && yNeighbour;
+                //ik veronderstel dat diagonaal niet word gezien als neighbour, anders kan deze bool gewoon weg
                 if(!cornerNeighbour && (xNeighbour || yNeighbour)){
                     neighbours.put(currentIndex, currentValue);
                 }
             }
             currentIndex ++;
         }
+        final int size = currentIndex;
         //error als dimenties niet kloppen
-        if(currentIndex != width*height){   //current index = size van de grid na de while loop klaar is
-            throw new GridSizeNotMatchException(width, height, currentIndex);
+        if(size != width*height){   //current index = size van de grid na de while loop klaar is
+            throw new GridSizeNotMatchException(width, height, size);
         }
         //verwijder indexen zonder zelfde value of buiten grid size:
-
-        return neighbours.keySet();
+        ArrayList<Integer> result = new ArrayList<>();
+        //return niet keyset van hashmap want hashmap kan tijdens for niet ge-modified.
+        //Anders moeten 2 loops -> minder efficient.
+        for(HashMap.Entry<Integer, Integer> entry : neighbours.entrySet()){
+            final int key = entry.getKey();
+            if(key >= size) continue; //dit is geen inconsistentie. Guard clauses maak ik altijd oneline
+            if(entry.getValue().equals(valueOnIndexToCheck)){
+                //equals ipv == omdat Integer een wrapper class is en dus een eigen ref heeft
+                result.add(key);
+            }
+        }
+        return result;
     }
 
 
