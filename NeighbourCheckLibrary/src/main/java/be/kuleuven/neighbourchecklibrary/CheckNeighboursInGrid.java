@@ -1,6 +1,10 @@
 package be.kuleuven.neighbourchecklibrary;
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Vector;
+
 public class CheckNeighboursInGrid {
     /**
      * This method takes a 1D Iterable and an element in the array and gives back an iterable containing the indexes of all neighbours with the same value as the specified element
@@ -10,8 +14,24 @@ public class CheckNeighboursInGrid {
      *@param height - Specifies the height of the grid (extra for checking if 1D grid is complete given the specified width)
      *@param indexToCheck - Specifies the index of the element which neighbours that need to be checked
      */
-    public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid,int width, int height, int indexToCheck){
-        Iterable<Integer> result = null;
-        return result;
+    public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid ,int width, int height, int indexToCheck){
+        ArrayList<Integer> neighbours = new ArrayList<>();  //extra handig want arraylist inherit al van Iterable
+        while(grid.iterator().hasNext()){
+            final int currentValue = grid.iterator().next();
+
+        }
+        return neighbours;
     }
+
+    private int[] indexNaarCoordinaat(int width, int height, int index){
+        final int totaleSize = width*height;
+        if(index >= totaleSize || index < 0){
+            throw new IndexOutOfBoundsException("index "+index+" ligt buiten "+width+"x"+height+" grid");
+        }
+        int[] coordinaat = new int[2];  //index 0=x, 1=y
+        coordinaat[0] = index / width;
+        coordinaat[1] = index % width;
+        return coordinaat;
+    }
+
 }
