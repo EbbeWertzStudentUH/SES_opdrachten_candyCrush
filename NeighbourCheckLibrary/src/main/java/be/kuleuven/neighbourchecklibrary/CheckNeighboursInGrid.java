@@ -1,9 +1,11 @@
 package be.kuleuven.neighbourchecklibrary;
 
 
+import be.kuleuven.neighbourchecklibrary.exceptions.GridSizeNotMatchException;
+
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Vector;
+import java.util.HashMap;
+
 
 public class CheckNeighboursInGrid {
     /**
@@ -15,23 +17,22 @@ public class CheckNeighboursInGrid {
      *@param indexToCheck - Specifies the index of the element which neighbours that need to be checked
      */
     public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid ,int width, int height, int indexToCheck){
-        ArrayList<Integer> neighbours = new ArrayList<>();  //extra handig want arraylist inherit al van Iterable
+        //hashmap: key=index, value=value
+        final HashMap<Integer, Integer> neighbours = new HashMap<>();
+        int gridSize = 0;
+        //y neighbour = index +- width
+        //x neighbour = index +- 1
         while(grid.iterator().hasNext()){
             final int currentValue = grid.iterator().next();
 
+            gridSize ++;
         }
-        return neighbours;
-    }
-
-    private int[] indexNaarCoordinaat(int width, int height, int index){
-        final int totaleSize = width*height;
-        if(index >= totaleSize || index < 0){
-            throw new IndexOutOfBoundsException("index "+index+" ligt buiten "+width+"x"+height+" grid");
+        //error als dimenties niet kloppen
+        if(gridSize != width*height){   //current index = size van de grid na de while loop klaar is
+            throw new GridSizeNotMatchException(width, height, gridSize);
         }
-        int[] coordinaat = new int[2];  //index 0=x, 1=y
-        coordinaat[0] = index / width;
-        coordinaat[1] = index % width;
-        return coordinaat;
+        //verwijder neighbours zonder zelfde waarde
+        return neighbours.keySet();
     }
 
 }
