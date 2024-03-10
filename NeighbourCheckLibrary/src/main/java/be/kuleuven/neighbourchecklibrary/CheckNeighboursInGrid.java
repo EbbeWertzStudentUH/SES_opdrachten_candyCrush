@@ -5,30 +5,9 @@ import be.kuleuven.neighbourchecklibrary.exceptions.GridSizeNotMatchException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 
 
 public class CheckNeighboursInGrid {
-
-    public static void main(String[] args) {
-
-        int[][] grid = {
-                {1,2,3,4,5,6,8,0,8,8},
-                {10,0,0,0,0,8,8,5,8,7},
-                {12,0,0,0,0,0,8,0,13,8},
-                {8,0,0,0,0,0,8,0,0,6},
-                {0,0,0,0,0,8,8,8,0,0}};
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        for(int[] row : grid){
-            for(int value : row){
-                arrayList.add(value);
-            }
-        }
-        System.out.println("start");
-        Iterable<Integer> result = getSameNeighboursIds(arrayList, 10, 5, 20);
-        System.out.println("stop");
-    }
-
 
     /**
      * This method takes a 1D Iterable and an element in the array and gives back an iterable containing the indexes of all neighbours with the same value as the specified element
@@ -39,7 +18,8 @@ public class CheckNeighboursInGrid {
      *@param indexToCheck - Specifies the index of the element which neighbours that need to be checked
      */
     public static Iterable<Integer> getSameNeighboursIds(Iterable<Integer> grid ,int width, int height, int indexToCheck){
-        //geen private helper functies want die zouden de grid size nodig hebben, die ik pas weet na het eind van de while.
+        //(behalve de filter func) geen private helper functies want die zouden de grid size nodig hebben,
+        // die ik pas weet na het eind van de while.
         //als ik hiervoor een aparte loop maak of de iterable omvorm naar array is het minder efficient.
         //hashmap: key=index, value=value
         final HashMap<Integer, Integer> neighbours = new HashMap<>();
@@ -69,6 +49,10 @@ public class CheckNeighboursInGrid {
             throw new GridSizeNotMatchException(width, height, size);
         }
         //verwijder indexen zonder zelfde value of buiten grid size:
+        return filterOnEqualValue(neighbours, valueOnIndexToCheck);
+    }
+
+    private static ArrayList<Integer> filterOnEqualValue(HashMap<Integer, Integer> neighbours, int valueOnIndexToCheck) {
         ArrayList<Integer> result = new ArrayList<>();
         //return niet keyset van hashmap want hashmap kan tijdens for niet ge-modified.
         //Anders moeten 2 loops -> minder efficient.
