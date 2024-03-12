@@ -11,6 +11,11 @@ public class CandycrushApplication extends Application {
 
     private static Stage stage;
 
+    public static String loggedInPlayer;
+    //ik gebruik deze class als een makkelijk accessible plaats.
+    //Het dient voor deze string puur enkel als data containter,
+    //vandaar dat deze public mag zijn.
+
     @Override
     public void start(Stage stage) {
         CandycrushApplication.stage = stage;

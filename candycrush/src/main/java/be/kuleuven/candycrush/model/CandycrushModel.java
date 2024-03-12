@@ -14,6 +14,9 @@ public class CandycrushModel {
 
     public CandycrushModel(String speler) {
         this.speler = speler;
+        reset();
+    }
+    public void reset(){
         speelbord = new ArrayList<>();
         width = 4;
         height = 4;

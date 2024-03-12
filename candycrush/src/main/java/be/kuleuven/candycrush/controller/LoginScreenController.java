@@ -51,6 +51,7 @@ public class LoginScreenController {
         if (!optionIsToLoginToExisting()) {
             loginDataBaseModel.addNewUser(nameField.getText(), passwordField.getText());
         }
+        CandycrushApplication.loggedInPlayer = nameField.getText();
         CandycrushApplication.setScene("game_screen.fxml");
     }
 

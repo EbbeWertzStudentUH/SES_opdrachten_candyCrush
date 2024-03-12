@@ -1,49 +1,42 @@
 package be.kuleuven.candycrush.controller;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import be.kuleuven.candycrush.CandycrushApplication;
 import be.kuleuven.candycrush.model.CandycrushModel;
 import be.kuleuven.candycrush.view.CandycrushView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 
 public class CandycrushController {
 
     @FXML
-    private ResourceBundle resources;
-
-    @FXML
-    private URL location;
-
-    @FXML
-    private Label Label;
-
-    @FXML
-    private Button btn;
-
-    @FXML
-    private AnchorPane paneel;
-
+    public Label welcomeLabel;
+    public Button StartResetButton;
     @FXML
     private AnchorPane speelbord;
-
-    @FXML
-    private TextField textInput;
-
     private CandycrushModel model;
     private CandycrushView view;
+
     @FXML
     void initialize() {
+        StartResetButton.setText("Start");
+        welcomeLabel.setText("Hello "+CandycrushApplication.loggedInPlayer+", enjoy the game!");
+        model = new CandycrushModel(CandycrushApplication.loggedInPlayer);
+        StartResetButton.setOnAction(action -> startOrReset());
+    }
 
-        model = new CandycrushModel("Test");
-        view = new CandycrushView(model);
-        speelbord.getChildren().add(view);
-        view.setOnMouseClicked(this::onCandyClicked);
+    private void startOrReset() {
+        if(speelbord.getChildren().isEmpty()){
+            view = new CandycrushView(model);
+            view.setOnMouseClicked(this::onCandyClicked);
+            speelbord.getChildren().add(view);
+            StartResetButton.setText("Reset");
+        } else {
+            model.reset();
+        }
+        update();
     }
 
     public void update(){
