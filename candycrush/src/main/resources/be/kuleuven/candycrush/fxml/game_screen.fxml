@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="paneel" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="292.0" prefWidth="600.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.candycrush.controller.CandycrushController">
+   <children>
+      <Button fx:id="StartResetKnop" layoutX="321.0" layoutY="20.0" mnemonicParsing="false" text="Start/Reset" />
+      <AnchorPane fx:id="speelbord" layoutX="95.0" layoutY="67.0" prefHeight="200.0" prefWidth="200.0" />
+   </children>
+</AnchorPane>

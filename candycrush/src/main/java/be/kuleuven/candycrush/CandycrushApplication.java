@@ -8,13 +8,27 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class CandycrushApplication extends Application {
+
+    private static Stage stage;
+
     @Override
-    public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(CandycrushApplication.class.getResource("candycrush-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello!");
-        stage.setScene(scene);
+    public void start(Stage stage) {
+        CandycrushApplication.stage = stage;
+        setScene("login_screen.fxml");
+        stage.setTitle("CandyCrush");
+        stage.setResizable(false);
         stage.show();
+    }
+
+    public static void setScene(String fxml){
+        final FXMLLoader fxmlLoader = new FXMLLoader(CandycrushApplication.class.getResource("fxml/"+fxml));
+        try {
+            final Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+            stage.setScene(scene);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
     public static void main(String[] args) {

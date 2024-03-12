@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.candycrush.controller.LoginScreenController">
+   <Button fx:id="loginButton" disable="true" layoutX="485.0" layoutY="334.0" mnemonicParsing="false" text="Login" />
+   <Label layoutX="28.0" layoutY="25.0" styleClass="mainTitle" text="CandyCrush" />
+   <RadioButton fx:id="loginExistingRadio" layoutX="30.0" layoutY="156.0" mnemonicParsing="false" selected="true" text="Log into existing account">
+      <toggleGroup>
+         <ToggleGroup fx:id="loginOptions" />
+      </toggleGroup>
+   </RadioButton>
+   <RadioButton fx:id="loginNewRadio" layoutX="30.0" layoutY="174.0" mnemonicParsing="false" text="Create new account" toggleGroup="$loginOptions" />
+   <PasswordField fx:id="passwordField" layoutX="162.0" layoutY="299.0" />
+   <TextField fx:id="nameField" layoutX="161.0" layoutY="246.0" />
+   <Label layoutX="93.0" layoutY="255.0" text="Name:" />
+   <Label layoutX="60.0" layoutY="308.0" text="Password:" />
+   <Label fx:id="message" layoutX="222.0" layoutY="200.0" text="Enter your login" />
+</AnchorPane>

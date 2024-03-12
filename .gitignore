@@ -1,3 +1,6 @@
+#eigen:
+loginDataBase.json
+#generated:
 .gradle
 build/
 !gradle/wrapper/gradle-wrapper.jar

@@ -1,0 +1,52 @@
+
+
+.root{
+    -fx-background-color: rgb(200,200,250);
+    -fx-border-color: rgb(100,100,150);
+    -fx-border-width: 10;
+}
+
+Button{
+    -fx-background-color: grey;
+    -fx-background-radius: 2;
+    -fx-border-color: black;
+    -fx-border-width: 2;
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+Button:hover{
+    -fx-background-color: lavender;
+    -fx-text-fill: black;
+    -fx-border-color: navy;
+}
+Button:pressed{
+    -fx-background-color: blue;
+    -fx-text-fill: lavender;
+}
+Label{
+    -fx-font-family: "Comic Sans MS";
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-font-size: 20;
+}
+.mainTitle{
+    -fx-font-size: 80;
+    -fx-text-fill: grey;
+    -fx-background-color: lavender;
+    -fx-background-radius: 10;
+    -fx-padding: 5 50 5 50;
+}
+PasswordField, TextField{
+    -fx-font-weight: bold;
+    -fx-font-family: "Comic Sans MS";
+    -fx-font-size: 20;
+    -fx-text-fill: black;
+    -fx-border-color: navy;
+    -fx-background-color: lavender;
+    -fx-border-width: 2;
+}
+.errormessage{
+    -fx-text-fill: red;
+}
