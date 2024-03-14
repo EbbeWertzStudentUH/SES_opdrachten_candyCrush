@@ -4,6 +4,7 @@ module be.kuleuven.candycrush {
 
     requires org.controlsfx.controls;
     requires com.google.gson;
+    requires NeighbourCheckLibrary.main;
 
     opens be.kuleuven.candycrush to javafx.fxml;
     opens be.kuleuven.candycrush.model to com.google.gson;

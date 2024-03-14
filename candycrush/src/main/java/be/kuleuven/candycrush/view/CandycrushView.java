@@ -1,6 +1,8 @@
 package be.kuleuven.candycrush.view;
 
 import be.kuleuven.candycrush.model.CandycrushModel;
+import be.kuleuven.candycrush.model.SnoepjeEnum;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
@@ -29,9 +31,10 @@ public class CandycrushView extends Region {
         Iterator<Integer> iter = model.getSpeelbord().iterator();
         while(iter.hasNext()) {
             int candy = iter.next();
-            Rectangle rectangle = new Rectangle(i * widthCandy, height * heigthCandy, widthCandy,heigthCandy);
-            rectangle.setFill(Color.TRANSPARENT);
-            rectangle.setStroke(Color.BLACK);
+            Rectangle rectangle = new Rectangle(i * widthCandy, height * heigthCandy, widthCandy-3,heigthCandy-3);
+            Color fill = SnoepjeEnum.values()[candy-1].javafxColor;
+            rectangle.setFill(fill);
+            rectangle.getStyleClass().add("snoepjeRect");
             Text text = new Text("" + candy);
             text.setX(rectangle.getX() + (rectangle.getWidth() - text.getBoundsInLocal().getWidth()) / 2);
             text.setY(rectangle.getY() + (rectangle.getHeight() + text.getBoundsInLocal().getHeight()) / 2);

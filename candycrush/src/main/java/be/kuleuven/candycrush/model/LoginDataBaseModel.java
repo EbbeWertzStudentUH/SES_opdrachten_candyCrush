@@ -10,9 +10,11 @@ import java.util.HashMap;
 
 public class LoginDataBaseModel {
 
-    private class Data{
-        public HashMap<String, UserInfoModel> users;
-        public Data(){
+    private class Data{ //door deze wrapper class kan GSON werken.
+        // Direct naar HashMap deserialisen gaat niet door de unieke class
+        //in de <> haakjes die niet worden meegegeven door .getClass() of .class
+        protected HashMap<String, UserInfoModel> users;
+        protected Data(){
             users = new HashMap<>();
         }
     }
@@ -38,8 +40,9 @@ public class LoginDataBaseModel {
     public int getHighscore(String user){
         return data.users.get(user).getHighScore();
     }
-    public void getHighscore(String user, int highscore){
+    public void setHighscore(String user, int highscore){
         data.users.get(user).setHighScore(highscore);
+        save();
     }
 
     public void addNewUser(String name, String password){

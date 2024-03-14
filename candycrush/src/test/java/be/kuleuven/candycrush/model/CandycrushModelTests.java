@@ -6,7 +6,7 @@ public class CandycrushModelTests {
 
     @Test
     public void gegeven_wanneer_dan(){
-        CandycrushModel model = new CandycrushModel("Arne");
+        CandycrushModel model = new CandycrushModel();
         String result = model.getSpeler();
         assert (result.equals("Arne"));
     }

@@ -9,9 +9,11 @@ import java.io.IOException;
 
 public class CandycrushApplication extends Application {
 
+
     private static Stage stage;
 
     public static String loggedInPlayer;
+    public static int highscoreOfLoggedInPlayer;
     //ik gebruik deze class als een makkelijk accessible plaats.
     //Het dient voor deze string puur enkel als data containter,
     //vandaar dat deze public mag zijn.

@@ -50,3 +50,18 @@ PasswordField, TextField{
 .errormessage{
     -fx-text-fill: red;
 }
+
+Text{
+    -fx-font-weight: bold;
+    -fx-font-family: "Comic Sans MS";
+}
+.snoepjeRect{
+    -fx-arc-width: 5;
+    -fx-arc-height: 5;
+    -fx-stroke-width: 3;
+    -fx-stroke: white;
+}
+.snoepjeRect:hover{
+    -fx-stroke: navy;
+    -fx-cursor: hand;
+}

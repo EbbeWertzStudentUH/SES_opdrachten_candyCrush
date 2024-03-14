@@ -3,11 +3,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
-            prefHeight="292.0" prefWidth="600.0" stylesheets="@../styles/style.css"
-            xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="be.kuleuven.candycrush.controller.CandycrushController">
-   <Button fx:id="StartResetButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Start/Reset"/>
-   <AnchorPane fx:id="speelbord" layoutX="95.0" layoutY="67.0" prefHeight="200.0" prefWidth="200.0"/>
-   <Label fx:id="welcomeLabel" layoutX="186.0" layoutY="23.0" text="Hello &lt;name&gt;, enjoy the game!"/>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="@../styles/style.css" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="be.kuleuven.candycrush.controller.CandycrushController">
+   <Button fx:id="StartResetButton" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Start/Reset" />
+   <AnchorPane fx:id="speelbord" layoutX="224.0" layoutY="67.0" prefHeight="300.0" prefWidth="300.0" />
+   <Label fx:id="welcomeLabel" layoutX="186.0" layoutY="23.0" text="Hello &lt;name&gt;, enjoy the game!" />
+   <Label layoutX="62.0" layoutY="67.0" text="Score:" />
+   <Label layoutX="20.0" layoutY="95.0" text="HighScore:" />
+   <Label fx:id="scoreLbl" layoutX="132.0" layoutY="67.0" text="&lt;000&gt;" />
+   <Label fx:id="hiScoreLbl" layoutX="132.0" layoutY="95.0" text="&lt;000&gt;" />
 </AnchorPane>

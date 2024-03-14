@@ -46,7 +46,7 @@ public class CheckNeighboursInGrid {
     private static ArrayList<Integer> filterOnEqualValue(HashMap<Integer, Integer> neighbours, int valueOnIndexToCheck) {
         ArrayList<Integer> result = new ArrayList<>();
         //return niet keyset van hashmap want hashmap kan tijdens for niet ge-modified.
-        //Anders moeten 2 loops -> minder efficient.
+        //Anders moeten 2 loops -> minder efficient. Daarom aparte arraylist
         for(HashMap.Entry<Integer, Integer> entry : neighbours.entrySet()){
             if(entry.getValue().equals(valueOnIndexToCheck)){
                 //equals ipv == omdat Integer een wrapper class is en dus een eigen ref heeft
