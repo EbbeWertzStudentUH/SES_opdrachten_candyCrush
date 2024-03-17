@@ -14,12 +14,12 @@ public class CandycrushModelTests {
 
 
     //Om de CI van de yml file te testen:
-    /*
+    
     @Test
     public void faal(){
         assert false;
     }
-    */
+    
 
 
     //score na reset en highscore testen kunnen niet omdat die afhankelijk zijn van
