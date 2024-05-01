@@ -12,7 +12,7 @@ import java.util.Random;
 public class CandycrushModel {
 
     private final String speler;
-    private final ArrayList<Candy> speelbord;
+
     private final BoardSize boardSize;
     private boolean highscoreIsUpdated;
     private int score;
@@ -65,13 +65,6 @@ public class CandycrushModel {
             }
         }
         return sameNeighbours;
-    }
-
-    public Candy getCandyOnPosition(Position position){
-        return speelbord.get(position.toIndex());
-    }
-    public void setCandyOnPosition(Position position, Candy candy){
-        speelbord.set(position.toIndex(), candy);
     }
 
     public void candyWithPositionSelected(Position position){
