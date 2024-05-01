@@ -6,13 +6,10 @@ import be.kuleuven.candycrush.model.records.Position;
 import be.kuleuven.candycrush.model.records.candy.*;
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-
-import java.util.Iterator;
 
 public class CandycrushView extends Region {
     private final CandycrushModel model;
@@ -26,11 +23,8 @@ public class CandycrushView extends Region {
 
     public void update(){
         getChildren().clear();
-        Iterator<Candy> candies = model.getSpeelbord().iterator();
-        Iterator<Position> positions = model.getBoardSize().positions().iterator();
-        while(candies.hasNext() && positions.hasNext()){
-            Candy candy = candies.next();
-            Position position = positions.next();
+        for(Position position : model.getBoard().getBoardSize().positions()){
+            Candy candy = model.getBoard().getCellAt(position);
             getChildren().add(makeCandyShape(position, candy));
         }
     }
@@ -38,9 +32,10 @@ public class CandycrushView extends Region {
     public Position getClickedPosition(MouseEvent me){
         int row = (int) me.getY()/gridSize;
         int column = (int) me.getX()/gridSize;
-        System.out.println(me.getX()+" - "+me.getY()+" - "+row+" - "+column);
-        if (row < model.getBoardSize().cols() && column < model.getBoardSize().cols()){
-            return new Position(row, column, model.getBoardSize());
+        if (row < model.getBoard().getBoardSize().cols() && column < model.getBoard().getBoardSize().cols()){
+            Position clickedPos = new Position(column, row, model.getBoard().getBoardSize());
+            System.out.println("Clicked: "+clickedPos);
+            return clickedPos;
         }
         return null;
     }

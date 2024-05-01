@@ -6,8 +6,6 @@ import be.kuleuven.candycrush.model.records.candy.NormalCandy;
 import be.kuleuven.candycrush.model.records.Position;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 import static org.assertj.core.api.Assertions.*;
 
 
@@ -18,14 +16,11 @@ public class CandycrushModelTests {
     public void reset_maakt_een_nieuw_random_bord(){
         // 1. Arrange
         final CandycrushModel model = new CandycrushModel();
-        //moet kopie maken want arraylist is niet immutable.
-        //Na de reset zal de "speelbordOrigineel" ook geupdate zijn omdat die nog steeds
-        //refereert naar hetzelfde object in geheugen, waardoor alle nieuwe waarden
-        //ook veranderd zijn in speelbordOrigineel.
-        final ArrayList<Candy> speelbordOrigineel = kopieVanArrayList(model.getSpeelbord());
+                                        //v-- clone zodat beiden boards niet intern in geheugen naar zelfde arraylist wijzen
+        final Board<Candy> speelbordOrigineel = new Board<>(model.getBoard());
         // 2. Act
         model.reset();
-        final ArrayList<Candy> speelbordNaReset = kopieVanArrayList(model.getSpeelbord());
+        final Board<Candy> speelbordNaReset = new Board<>(model.getBoard());
         // 3. Assert
         assertThat(speelbordNaReset).isNotEqualTo(speelbordOrigineel);
     }
@@ -37,7 +32,7 @@ public class CandycrushModelTests {
         zetRijOpSpelBord(model, 0, new int[]{2,1,2,1,1,1,1,1,1,1});
         zetRijOpSpelBord(model, 1, new int[]{1,2,2,1,1,1,1,1,1,1});
         zetRijOpSpelBord(model, 2, new int[]{2,2,1,1,1,1,1,1,1,1});
-        final Position positionToCheck = new Position(1,1, model.getBoardSize());
+        final Position positionToCheck = new Position(1,1, model.getBoard().getBoardSize());
         // 2. Act
         model.candyWithPositionSelected(positionToCheck);
         final int punten = model.getScore();
@@ -52,7 +47,7 @@ public class CandycrushModelTests {
         zetRijOpSpelBord(model, 0, new int[]{2,1,2,1,1,1,1,1,1,1});
         zetRijOpSpelBord(model, 1, new int[]{1,2,1,1,1,1,1,1,1,1});
         zetRijOpSpelBord(model, 2, new int[]{1,1,1,1,1,1,1,1,1,1});
-        final Position positionToCheck = new Position(1,1, model.getBoardSize());
+        final Position positionToCheck = new Position(1,1, model.getBoard().getBoardSize());
         // 2. Act
         model.candyWithPositionSelected(positionToCheck);
         final int punten = model.getScore();
@@ -90,7 +85,7 @@ public class CandycrushModelTests {
         zetRijOpSpelBord(model, 0, new int[]{1,1,1,1,1,1,1,1,2,2});
         zetRijOpSpelBord(model, 1, new int[]{1,1,1,1,1,1,1,1,2,2});
         zetRijOpSpelBord(model, 2, new int[]{2,1,1,1,1,1,1,1,2,2});
-        final Position positionToCheck = new Position(1,8, model.getBoardSize());
+        final Position positionToCheck = new Position(1,8, model.getBoard().getBoardSize());
         // 2. Act
         model.candyWithPositionSelected(positionToCheck);
         final int punten = model.getScore();
@@ -105,7 +100,7 @@ public class CandycrushModelTests {
         final CandycrushModel model = new CandycrushModel();
         zetRijOpSpelBord(model, 0, new int[]{2,2,1,1,1,1,1,1,1,1});
         zetRijOpSpelBord(model, 1, new int[]{2,2,1,1,1,1,1,1,1,1});
-        final Position positionToCheck = new Position(0,0, model.getBoardSize());
+        final Position positionToCheck = new Position(0,0, model.getBoard().getBoardSize());
         // 2. Act
         model.candyWithPositionSelected(positionToCheck);
         final int punten = model.getScore();
@@ -119,7 +114,7 @@ public class CandycrushModelTests {
         final CandycrushModel model = new CandycrushModel();
         zetRijOpSpelBord(model, 8, new int[]{1,1,1,1,1,1,1,1,2,2});
         zetRijOpSpelBord(model, 9, new int[]{1,1,1,1,1,1,1,1,2,2});
-        final Position positionToCheck = new Position(9,9, model.getBoardSize());
+        final Position positionToCheck = new Position(9,9, model.getBoard().getBoardSize());
         // 2. Act
         model.candyWithPositionSelected(positionToCheck);
         final int punten = model.getScore();
@@ -127,17 +122,12 @@ public class CandycrushModelTests {
         assertThat(punten).isEqualTo(3);
     }
 
-
-    private ArrayList<Candy> kopieVanArrayList(ArrayList<Candy> lijst){
-        return new ArrayList<>(lijst);
-    }
-
     private void zetRijOpSpelBord(CandycrushModel model,int rijIndex, int[] rij){
-        ArrayList<Candy> spelBord = model.getSpeelbord();
+        Board<Candy> spelBord = model.getBoard();
         int kolomIndex = 0;
         for(int i : rij){
-            final Position pos = new Position(rijIndex,kolomIndex, model.getBoardSize());
-            spelBord.set(pos.toIndex(), new NormalCandy(i));
+            final Position pos = new Position(rijIndex,kolomIndex, model.getBoard().getBoardSize());
+            spelBord.replaceCellAt(pos, new NormalCandy(i));
             kolomIndex ++;
         }
     }
