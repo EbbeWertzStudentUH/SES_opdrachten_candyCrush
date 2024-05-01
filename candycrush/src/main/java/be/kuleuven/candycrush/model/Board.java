@@ -8,6 +8,7 @@ package be.kuleuven.candycrush.model;
 import be.kuleuven.candycrush.model.interfaces.Candy;
 import be.kuleuven.candycrush.model.records.BoardSize;
 import be.kuleuven.candycrush.model.records.Position;
+import javafx.geometry.Pos;
 
 import java.util.ArrayList;
 import java.util.function.Function;
@@ -34,7 +35,9 @@ public class Board<T>{
     }
     //TODO hele bord te vullen via func
     public void fill(Function<Position, T> cellCreator){
-
+        for(Position position : boardSize.positions()){
+            replaceCellAt(position, cellCreator.apply(position));
+        }
     }
     //TODO alle cellen van het huidige bord kopieert naar het meegegeven bord
     //niet dezelfde afmetingen heeft, gooi je een exception
