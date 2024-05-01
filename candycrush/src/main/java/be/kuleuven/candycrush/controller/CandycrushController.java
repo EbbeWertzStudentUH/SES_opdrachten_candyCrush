@@ -3,6 +3,7 @@ package be.kuleuven.candycrush.controller;
 import be.kuleuven.candycrush.CandycrushApplication;
 import be.kuleuven.candycrush.model.CandycrushModel;
 import be.kuleuven.candycrush.model.LoginDataBaseModel;
+import be.kuleuven.candycrush.model.records.Position;
 import be.kuleuven.candycrush.view.CandycrushView;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -57,8 +58,8 @@ public class CandycrushController {
     }
 
     public void onCandyClicked(MouseEvent me){
-        int candyIndex = view.getIndexOfClicked(me);
-        model.candyWithIndexSelected(candyIndex);
+        Position candyPosition = view.getClickedPosition(me);
+        model.candyWithPositionSelected(candyPosition);
         update();
     }
 

@@ -1,63 +1,70 @@
 package be.kuleuven.candycrush.view;
 
 import be.kuleuven.candycrush.model.CandycrushModel;
-import be.kuleuven.candycrush.model.SnoepjeEnum;
-import javafx.scene.control.Label;
+import be.kuleuven.candycrush.model.interfaces.Candy;
+import be.kuleuven.candycrush.model.records.Position;
+import be.kuleuven.candycrush.model.records.candy.*;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 public class CandycrushView extends Region {
-    private CandycrushModel model;
-    private int widthCandy;
-    private int heigthCandy;
+    private final CandycrushModel model;
+    private final int gridSize;
 
     public CandycrushView(CandycrushModel model) {
         this.model = model;
-        widthCandy = 30;
-        heigthCandy = 30;
+        gridSize = 30;  //width and height of grid
         update();
     }
 
     public void update(){
         getChildren().clear();
-        int i = 0;
-        int height = 0;
-        Iterator<Integer> iter = model.getSpeelbord().iterator();
-        while(iter.hasNext()) {
-            int candy = iter.next();
-            Rectangle rectangle = new Rectangle(i * widthCandy, height * heigthCandy, widthCandy-3,heigthCandy-3);
-            Color fill = SnoepjeEnum.values()[candy-1].javafxColor;
-            rectangle.setFill(fill);
-            rectangle.getStyleClass().add("snoepjeRect");
-            Text text = new Text("" + candy);
-            text.setX(rectangle.getX() + (rectangle.getWidth() - text.getBoundsInLocal().getWidth()) / 2);
-            text.setY(rectangle.getY() + (rectangle.getHeight() + text.getBoundsInLocal().getHeight()) / 2);
-            getChildren().addAll(rectangle,text);
-
-            if (i == model.getWidth() - 1) {
-                i = 0;
-                height++;
-            } else {
-                i++;
-            }
+        Iterator<Candy> candies = model.getSpeelbord().iterator();
+        Iterator<Position> positions = model.getBoardSize().positions().iterator();
+        while(candies.hasNext() && positions.hasNext()){
+            Candy candy = candies.next();
+            Position position = positions.next();
+            getChildren().add(makeCandyShape(position, candy));
         }
     }
 
-    public int getIndexOfClicked(MouseEvent me){
-        int index = -1;
-        int row = (int) me.getY()/heigthCandy;
-        int column = (int) me.getX()/widthCandy;
+    public Position getClickedPosition(MouseEvent me){
+        int row = (int) me.getY()/gridSize;
+        int column = (int) me.getX()/gridSize;
         System.out.println(me.getX()+" - "+me.getY()+" - "+row+" - "+column);
-        if (row < model.getWidth() && column < model.getHeight()){
-            index = model.getIndexFromRowColumn(row,column);
-            System.out.println(index);
+        if (row < model.getBoardSize().cols() && column < model.getBoardSize().cols()){
+            return new Position(row, column, model.getBoardSize());
         }
-        return index;
+        return null;
+    }
+
+    private Color getNormalCandyColor(int colorNumber){
+        return (new Color[]
+                {Color.LIGHTBLUE, Color.LEMONCHIFFON, Color.LIGHTGREEN, Color.LIGHTCORAL})
+        [colorNumber];
+    }
+    private Node makeCandyShape(Position position, Candy candy){
+        final double candySize = 0.8 * gridSize;
+        final Node shape = switch (candy){
+            case NormalCandy(int color) -> new Circle(candySize/2, getNormalCandyColor(color));
+            case Tri_nitrotolueneCandy ignored -> new Rectangle(candySize, candySize, Color.CRIMSON);
+            case FlatLinerCandy ignored -> new Rectangle(candySize, candySize, Color.DARKCYAN);
+            case ChocolateGoldCandy ignored -> new Rectangle(candySize, candySize, Color.GOLD);
+            case HyperDextroseCandy ignored -> new Rectangle(candySize, candySize, Color.DEEPPINK);
+            //default hoef niet want interface is sealed dus andere opties zijn niet mogelijk
+        };
+        shape.getStyleClass().add("snoepjeRect");
+        double offsetCorrection  = shape instanceof Circle ? candySize /2 : 0;
+        // ^-- Cirkel heeft origin in centrum terwijl rectangle in linksboven hoek
+        shape.setLayoutX(position.col() * gridSize + offsetCorrection);
+        shape.setLayoutY(position.row() * gridSize + offsetCorrection);
+        return shape;
     }
 }
