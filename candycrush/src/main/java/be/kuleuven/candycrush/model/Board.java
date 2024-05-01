@@ -28,7 +28,7 @@ public class Board<T>{
     }
     //TODO cel op een gegeven positie te vervangen door een meegegeven object
     public void replaceCellAt(Position position, T newCell){
-
+        board.set(position.toIndex(), newCell);
     }
     //TODO hele bord te vullen via func
     public void fill(Function<Position, T> cellCreator){
