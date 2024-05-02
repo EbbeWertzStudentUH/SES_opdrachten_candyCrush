@@ -34,7 +34,7 @@ public class CandycrushModel {
         CandycrushModel model = new CandycrushModel();
         int i = 1;
         for (Position p : model.board.getBoardSize().positions()) {
-            System.out.print(model.board.getCellAt(p));
+            System.out.print(model.board.getCellAtPosition(p));
             if (i % model.board.getBoardSize().cols() == 0) {
                 System.out.print("\n");
                 i = 1;
@@ -53,8 +53,8 @@ public class CandycrushModel {
         Iterable<Position> neighbours = position.neighborPositions();
         ArrayList<Position> sameNeighbours = new ArrayList<>();
         for(Position pos : neighbours){
-            Candy candyOnPosition = board.getCellAt(position);
-            Candy candyOnPos = board.getCellAt(pos);
+            Candy candyOnPosition = board.getCellAtPosition(position);
+            Candy candyOnPos = board.getCellAtPosition(pos);
             if(candyOnPos.equals(candyOnPosition)){
                 sameNeighbours.add(pos);
             }
@@ -71,11 +71,11 @@ public class CandycrushModel {
             addScore(sameNeighbours.size());
             //update neighbours
             for(Position pos : sameNeighbours){
-                board.replaceCellAt(pos, generateRandomCandy());
+                board.replaceCellAtPosition(pos, generateRandomCandy());
             }
         }
         //update self
-        board.replaceCellAt(position, generateRandomCandy());
+        board.replaceCellAtPosition(position, generateRandomCandy());
     }
 
     private void addScore(int points){
