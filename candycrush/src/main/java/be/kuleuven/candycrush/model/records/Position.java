@@ -1,6 +1,8 @@
 package be.kuleuven.candycrush.model.records;
 
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.stream.Stream;
 
 public record Position(int col, int row, BoardSize boardSize) {
 
@@ -52,5 +54,32 @@ public record Position(int col, int row, BoardSize boardSize) {
 
     private boolean isInBounds(int num, int lim){
         return num >= 0 && num < lim;
+    }
+
+
+    public Stream<Position> walkLeft(){
+        //geen mapping want return moet nog steeds van Position's zijn
+        return boardSize.positions().stream() //alle positions
+                .filter(p -> p.row == row)  //neem zelfde rij
+                .filter(p -> p.col <= col) //neem alles links
+                .sorted(Comparator.comparingInt(Position::col).reversed());//geen collect zodat stream gereturnt word en geen lijst
+    }
+    public Stream<Position> walkRight(){
+        return boardSize.positions().stream()
+                .filter(p -> p.row == row)
+                .filter(p -> p.col >= col)
+                .sorted(Comparator.comparingInt(Position::col));
+    }
+    public Stream<Position> walkUp(){
+        return boardSize.positions().stream()
+                .filter(p -> p.col == col)
+                .filter(p -> p.row <= row)
+                .sorted(Comparator.comparingInt(Position::row).reversed());
+    }
+    public Stream<Position> walkDown(){
+        return boardSize.positions().stream()
+                .filter(p -> p.row == col)
+                .filter(p -> p.row >= row)
+                .sorted(Comparator.comparingInt(Position::row));
     }
 }
