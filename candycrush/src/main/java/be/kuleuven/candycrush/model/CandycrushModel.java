@@ -7,7 +7,11 @@ import be.kuleuven.candycrush.model.records.candy.*;
 import be.kuleuven.candycrush.model.records.Position;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class CandycrushModel {
 
@@ -106,5 +110,46 @@ public class CandycrushModel {
                 new ChocolateGoldCandy(),
                 new HyperDextroseCandy()};
         return candies[intValue];
+    }
+
+
+    private Set<List<Position>> findAllMatches(){
+        Stream<List<Position>> horizontal = horizontalStartingPositions()
+                .map(this::longestMatchToRight)
+                .filter(l -> l.size() >= 3);
+        Stream<List<Position>> vertical = verticalStartingPositions()
+                .map(this::longestMatchDown)
+                .filter(l -> l.size() >= 3);
+
+        return Stream.concat(horizontal, vertical)
+                .collect(Collectors.toSet());
+    }
+
+    private boolean firstTwoHaveCandy(Candy candy, Stream<Position> positions){
+        return positions
+                .limit(2)
+                .filter(p -> board.getCellAtPosition(p).equals(candy))//beter dan match want:
+                .count() >= 2;  //als stream initeel korter dan 2 elementen heeft, komt uit filter ook geen count 2
+    }
+    private Stream<Position> horizontalStartingPositions(){
+        return board.getBoardSize().positions().stream()
+                .filter(p -> !firstTwoHaveCandy(board.getCellAtPosition(p), p.walkLeft()));
+    }
+    private Stream<Position> verticalStartingPositions(){
+        return board.getBoardSize().positions().stream()
+                .filter(p -> !firstTwoHaveCandy(board.getCellAtPosition(p), p.walkUp()));
+    }
+    private boolean equalCells(Position pos1, Position pos2){
+        return board.getCellAtPosition(pos1).equals(board.getCellAtPosition(pos2));
+    }
+    private List<Position> longestMatchToRight(Position pos){
+        return pos.walkRight()
+                .takeWhile(p -> equalCells(pos,p))
+                .collect(Collectors.toList());
+    }
+    private List<Position> longestMatchDown(Position pos){
+        return pos.walkDown()
+                .takeWhile(p -> equalCells(pos,p))
+                .collect(Collectors.toList());
     }
 }
