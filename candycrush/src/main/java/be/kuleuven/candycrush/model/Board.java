@@ -17,9 +17,8 @@ public class Board<T>{
         this.boardSize = boardSize;
         board = new HashMap<>();
         reverseBoard = new HashMap<>();
-        fill(p -> null);
     }
-    //om te clonen
+    //om te clonen voor tests:
     public Board(Board<T> board){
         boardSize = board.boardSize;
         this.board = new HashMap<>(board.board);
@@ -33,38 +32,47 @@ public class Board<T>{
 
     public void replaceCellAtPosition(Position position, T newCell){
         validatePosition(position);
+
+        //verwijder oude cell
         T oldCell = getCellAtPosition(position);
-        //als de nieuwe cell geen positions heeft, initialiseer positions
-        reverseBoard.computeIfAbsent(newCell, c -> new HashSet<>());
-        //voeg position toe aan nieuwe cell
+        if(oldCell != null){
+            if(reverseBoard.containsKey(oldCell))
+                reverseBoard.get(oldCell).remove(position);
+        }
+        //voeg nieuwe cell toe
+        if (!reverseBoard.containsKey(oldCell)) {
+            reverseBoard.put(newCell, new HashSet<>());
+        }
         reverseBoard.get(newCell).add(position);
-        //verwijder position van oude cell
-        reverseBoard.get(oldCell).remove(position);
         board.put(position, newCell);
     }
 
-    //TODO fill voor reverseboard
-
     public Set<Position> getPositionsOfElement(T element){
-        Set<Position> positions = reverseBoard.get(element);
+        Set<Position> positions;
+        if(reverseBoard.containsKey(element)){
+            positions = reverseBoard.get(element);
+        } else {
+            positions = new HashSet<>();
+        }
         return Collections.unmodifiableSet(positions);
     }
 
 
     public void fill(Function<Position, ? extends T> cellCreator){
         board.clear();
+        reverseBoard.clear();
         for(Position position : boardSize.positions()){
-            board.put(position, cellCreator.apply(position));
+            replaceCellAtPosition(position, cellCreator.apply(position));
         }
     }
     public void copyTo(Board<? super T> otherBoard){
         if(!otherBoard.boardSize.equals(boardSize)){
             throw new IllegalArgumentException("Boardsize of other board: "+otherBoard.boardSize+" does not match the boardsize of this board:"+boardSize);
         }
-        for(Position position : boardSize.positions()){
-            T item = board.get(position);
-            otherBoard.board.put(position, item);
-        }
+        otherBoard.board.clear();
+        otherBoard.reverseBoard.clear();
+        otherBoard.board.putAll(board);
+        otherBoard.reverseBoard.putAll(reverseBoard);
     }
 
     private void validatePosition(Position position){
