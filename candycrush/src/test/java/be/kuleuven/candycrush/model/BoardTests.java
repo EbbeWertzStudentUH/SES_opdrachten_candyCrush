@@ -18,7 +18,7 @@ public class BoardTests {
         Candy candy = new NormalCandy(0);
         board.fill(p -> candy);
         for(Position position : board.getBoardSize().positions()){
-            assertThat(board.getCellAt(position)).isEqualTo(candy);
+            assertThat(board.getCellAtPosition(position)).isEqualTo(candy);
         }
     }
     @Test
@@ -30,9 +30,9 @@ public class BoardTests {
         board.fill(p -> p.equals(specialPos) ? candySpeciaal : candy);
         for(Position position : board.getBoardSize().positions()){
             if(position.equals(specialPos)){
-                assertThat(board.getCellAt(position)).isEqualTo(candySpeciaal);
+                assertThat(board.getCellAtPosition(position)).isEqualTo(candySpeciaal);
             } else {
-                assertThat(board.getCellAt(position)).isEqualTo(candy);
+                assertThat(board.getCellAtPosition(position)).isEqualTo(candy);
             }
         }
     }
@@ -45,9 +45,9 @@ public class BoardTests {
         board.fill(p -> p.equals(specialPos) ? candySpeciaal : candy);
         for(Position position : board.getBoardSize().positions()){
             if(position.equals(specialPos)){
-                assertThat(board.getCellAt(position)).isInstanceOf(Tri_nitrotolueneCandy.class);
+                assertThat(board.getCellAtPosition(position)).isInstanceOf(Tri_nitrotolueneCandy.class);
             } else {
-                assertThat(board.getCellAt(position)).isInstanceOf(NormalCandy.class);
+                assertThat(board.getCellAtPosition(position)).isInstanceOf(NormalCandy.class);
             }
         }
     }
@@ -59,7 +59,7 @@ public class BoardTests {
         Board<Candy> board2 = new Board<>(new BoardSize(5,5));
         board.copyTo(board2);
         for(Position position : board.getBoardSize().positions()){
-            assertThat(board.getCellAt(position)).isEqualTo(board2.getCellAt(position));
+            assertThat(board.getCellAtPosition(position)).isEqualTo(board2.getCellAtPosition(position));
         }
     }
     @Test
@@ -69,7 +69,7 @@ public class BoardTests {
         Board<Candy> board2 = new Board<>(new BoardSize(5,5));
         board.copyTo(board2);
         for(Position position : board.getBoardSize().positions()){
-            assertThat(board.getCellAt(position)).isEqualTo(board2.getCellAt(position));
+            assertThat(board.getCellAtPosition(position)).isEqualTo(board2.getCellAtPosition(position));
         }
     }
 

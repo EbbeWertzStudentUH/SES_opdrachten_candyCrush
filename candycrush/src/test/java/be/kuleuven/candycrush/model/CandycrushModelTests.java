@@ -127,7 +127,7 @@ public class CandycrushModelTests {
         int kolomIndex = 0;
         for(int i : rij){
             final Position pos = new Position(rijIndex,kolomIndex, model.getBoard().getBoardSize());
-            spelBord.replaceCellAt(pos, new NormalCandy(i));
+            spelBord.replaceCellAtPosition(pos, new NormalCandy(i));
             kolomIndex ++;
         }
     }

@@ -3,37 +3,66 @@ package be.kuleuven.candycrush.model;
 import be.kuleuven.candycrush.model.records.BoardSize;
 import be.kuleuven.candycrush.model.records.Position;
 
-import java.util.ArrayList;
+import java.util.*;
 import java.util.function.Function;
 
 public class Board<T>{
 
-    private final ArrayList<T> board;
+    private final Map<Position, T> board;
+    private final Map<T, Set<Position>> reverseBoard;
 
     private final BoardSize boardSize;
 
     public Board(BoardSize boardSize) {
         this.boardSize = boardSize;
-        board = new ArrayList<>();
+        board = new HashMap<>();
+        reverseBoard = new HashMap<>();
     }
-    //om te clonen
+    //om te clonen voor tests:
     public Board(Board<T> board){
-        this.boardSize = board.boardSize;
-        this.board = new ArrayList<>(board.board);
+        boardSize = board.boardSize;
+        this.board = new HashMap<>(board.board);
+        reverseBoard = new HashMap<>(board.reverseBoard);
     }
 
-    public T getCellAt(Position position){
+    public T getCellAtPosition(Position position){
         validatePosition(position);
-        return board.get(position.toIndex());
+        return board.get(position);
     }
-    public void replaceCellAt(Position position, T newCell){
+
+    public void replaceCellAtPosition(Position position, T newCell){
         validatePosition(position);
-        board.set(position.toIndex(), newCell);
+
+        //verwijder oude cell
+        T oldCell = getCellAtPosition(position);
+        if(oldCell != null){
+            if(reverseBoard.containsKey(oldCell))
+                reverseBoard.get(oldCell).remove(position);
+        }
+        //voeg nieuwe cell toe
+        if (!reverseBoard.containsKey(oldCell)) {
+            reverseBoard.put(newCell, new HashSet<>());
+        }
+        reverseBoard.get(newCell).add(position);
+        board.put(position, newCell);
     }
+
+    public Set<Position> getPositionsOfElement(T element){
+        Set<Position> positions;
+        if(reverseBoard.containsKey(element)){
+            positions = reverseBoard.get(element);
+        } else {
+            positions = new HashSet<>();
+        }
+        return Collections.unmodifiableSet(positions);
+    }
+
+
     public void fill(Function<Position, ? extends T> cellCreator){
         board.clear();
+        reverseBoard.clear();
         for(Position position : boardSize.positions()){
-            board.add(cellCreator.apply(position));
+            replaceCellAtPosition(position, cellCreator.apply(position));
         }
     }
     public void copyTo(Board<? super T> otherBoard){
@@ -41,7 +70,9 @@ public class Board<T>{
             throw new IllegalArgumentException("Boardsize of other board: "+otherBoard.boardSize+" does not match the boardsize of this board:"+boardSize);
         }
         otherBoard.board.clear();
-        otherBoard.board.addAll(board);
+        otherBoard.reverseBoard.clear();
+        otherBoard.board.putAll(board);
+        otherBoard.reverseBoard.putAll(reverseBoard);
     }
 
     private void validatePosition(Position position){

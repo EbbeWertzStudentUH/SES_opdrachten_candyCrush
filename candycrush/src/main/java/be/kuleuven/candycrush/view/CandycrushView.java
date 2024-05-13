@@ -24,7 +24,7 @@ public class CandycrushView extends Region {
     public void update(){
         getChildren().clear();
         for(Position position : model.getBoard().getBoardSize().positions()){
-            Candy candy = model.getBoard().getCellAt(position);
+            Candy candy = model.getBoard().getCellAtPosition(position);
             getChildren().add(makeCandyShape(position, candy));
         }
     }
