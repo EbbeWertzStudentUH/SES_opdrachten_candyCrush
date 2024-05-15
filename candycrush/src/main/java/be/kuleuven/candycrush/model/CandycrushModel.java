@@ -128,11 +128,30 @@ public class CandycrushModel {
                 .collect(Collectors.toList());
     }
 
+
     private void clearMatch(List<Position> match){
         if(match.isEmpty()) return;
         Position pos = match.removeFirst();
         board.replaceCellAtPosition(pos, new EmptyCandy());
         clearMatch(match);
+    }
+
+    private Position above(Position pos){
+        return new Position(pos.col(), pos.row() -1, board.getBoardSize());
+    }
+
+    private void fallDownTo(Position pos, Position bottom){
+        if(pos.row() == 0) return;
+
+        Position upPos = above(pos);
+        Candy current = board.getCellAtPosition(pos);
+        Candy up = board.getCellAtPosition(upPos);
+        if(current instanceof EmptyCandy && !(up instanceof EmptyCandy)){
+            board.replaceCellAtPosition(bottom, up);
+            board.replaceCellAtPosition(upPos, new EmptyCandy());
+            bottom = above(bottom);
+        }
+        fallDownTo(upPos, bottom);
     }
 
 }
