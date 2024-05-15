@@ -6,10 +6,7 @@ import be.kuleuven.candycrush.model.records.BoardSize;
 import be.kuleuven.candycrush.model.records.candy.*;
 import be.kuleuven.candycrush.model.records.Position;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,33 +50,11 @@ public class CandycrushModel {
     public int getHighScore() {return highScore;}
     public boolean highscoreIsUpdated(){return highscoreIsUpdated;}
 
-    public Iterable<Position> getSameNeighbourPositions(Position position){
-        Iterable<Position> neighbours = position.neighborPositions();
-        ArrayList<Position> sameNeighbours = new ArrayList<>();
-        for(Position pos : neighbours){
-            Candy candyOnPosition = board.getCellAtPosition(position);
-            Candy candyOnPos = board.getCellAtPosition(pos);
-            if(candyOnPos.equals(candyOnPosition)){
-                sameNeighbours.add(pos);
-            }
-        }
-        return sameNeighbours;
-    }
-
     public void candyWithPositionSelected(Position position){
-        //get neighbours
-        ArrayList<Position> sameNeighbours;
-        sameNeighbours = (ArrayList<Position>) getSameNeighbourPositions(position);
-        //give score if > 3
-        if(sameNeighbours.size() >= 3){
-            addScore(sameNeighbours.size());
-            //update neighbours
-            for(Position pos : sameNeighbours){
-                board.replaceCellAtPosition(pos, generateRandomCandy());
-            }
+        Set<List<Position>> matches = findAllMatches();
+        for (List<Position> match : matches) {
+            clearMatch(match);
         }
-        //update self
-        board.replaceCellAtPosition(position, generateRandomCandy());
     }
 
     private void addScore(int points){
@@ -121,7 +96,7 @@ public class CandycrushModel {
                 .map(this::longestMatchDown)
                 .filter(l -> l.size() >= 3);
 
-        return Stream.concat(horizontal, vertical)
+        return Stream.concat(vertical, horizontal)
                 .collect(Collectors.toSet());
     }
 
@@ -152,4 +127,12 @@ public class CandycrushModel {
                 .takeWhile(p -> equalCells(pos,p))
                 .collect(Collectors.toList());
     }
+
+    private void clearMatch(List<Position> match){
+        if(match.isEmpty()) return;
+        Position pos = match.removeFirst();
+        board.replaceCellAtPosition(pos, new EmptyCandy());
+        clearMatch(match);
+    }
+
 }

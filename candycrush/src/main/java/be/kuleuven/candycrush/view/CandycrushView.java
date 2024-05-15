@@ -53,7 +53,7 @@ public class CandycrushView extends Region {
             case FlatLinerCandy ignored -> new Rectangle(candySize, candySize, Color.DARKCYAN);
             case ChocolateGoldCandy ignored -> new Rectangle(candySize, candySize, Color.GOLD);
             case HyperDextroseCandy ignored -> new Rectangle(candySize, candySize, Color.DEEPPINK);
-            //default hoef niet want interface is sealed dus andere opties zijn niet mogelijk
+            case EmptyCandy ignored -> new Circle(1, Color.GRAY);
         };
         shape.getStyleClass().add("snoepjeRect");
         double offsetCorrection  = shape instanceof Circle ? candySize /2 : 0;

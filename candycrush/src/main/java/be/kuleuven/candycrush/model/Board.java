@@ -25,7 +25,7 @@ public class Board<T>{
         reverseBoard = new HashMap<>(board.reverseBoard);
     }
 
-    public T getCellAtPosition(Position position){
+    public T getCellAtPosition(Position position) {
         validatePosition(position);
         return board.get(position);
     }
@@ -40,7 +40,7 @@ public class Board<T>{
                 reverseBoard.get(oldCell).remove(position);
         }
         //voeg nieuwe cell toe
-        if (!reverseBoard.containsKey(oldCell)) {
+        if (!reverseBoard.containsKey(newCell)) {
             reverseBoard.put(newCell, new HashSet<>());
         }
         reverseBoard.get(newCell).add(position);

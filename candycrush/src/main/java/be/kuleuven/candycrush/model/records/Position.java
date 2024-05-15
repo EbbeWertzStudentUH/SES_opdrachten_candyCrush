@@ -78,7 +78,7 @@ public record Position(int col, int row, BoardSize boardSize) {
     }
     public Stream<Position> walkDown(){
         return boardSize.positions().stream()
-                .filter(p -> p.row == col)
+                .filter(p -> p.col == col)
                 .filter(p -> p.row >= row)
                 .sorted(Comparator.comparingInt(Position::row));
     }
