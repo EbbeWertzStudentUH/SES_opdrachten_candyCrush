@@ -16,6 +16,10 @@ public record Position(int col, int row, BoardSize boardSize) {
         }
     }
 
+    public Position above(){
+        return new Position(col, row-1, boardSize);
+    }
+
     public int toIndex(){
         return row * boardSize().cols() + col;
     }

@@ -50,12 +50,22 @@ public class CandycrushModel {
     public int getHighScore() {return highScore;}
     public boolean highscoreIsUpdated(){return highscoreIsUpdated;}
 
+
+
+
+
+
+
+
     public void candyWithPositionSelected(Position position){
-        Set<List<Position>> matches = findAllMatches();
-        for (List<Position> match : matches) {
-            clearMatch(match);
-        }
+        updateBoard();
     }
+
+
+
+
+
+
 
     private void addScore(int points){
         score += points;
@@ -115,6 +125,8 @@ public class CandycrushModel {
                 .filter(p -> !firstTwoHaveCandy(board.getCellAtPosition(p), p.walkUp()));
     }
     private boolean equalCells(Position pos1, Position pos2){
+        if(board.getCellAtPosition(pos1) instanceof EmptyCandy)  return false;
+        if(board.getCellAtPosition(pos2) instanceof EmptyCandy)  return false;
         return board.getCellAtPosition(pos1).equals(board.getCellAtPosition(pos2));
     }
     private List<Position> longestMatchToRight(Position pos){
@@ -128,29 +140,46 @@ public class CandycrushModel {
                 .collect(Collectors.toList());
     }
 
+    private boolean updateBoard(){
+        Set<List<Position>> matches = findAllMatches();
+        //als er niets te updaten is return false
+        if(matches.isEmpty()) return false;
+        for (List<Position> match : matches) {
+            clearMatch(match);
+            for(Position p : match){
+                fallDownTo(p,p);
+                addScore(1);
+            }
+        }
+        updateBoard();
+        return true;
+    }
+
 
     private void clearMatch(List<Position> match){
         if(match.isEmpty()) return;
-        Position pos = match.removeFirst();
+        List<Position> matchCopy = new ArrayList<>(match);
+        Position pos = matchCopy.removeFirst();
         board.replaceCellAtPosition(pos, new EmptyCandy());
-        clearMatch(match);
-    }
-
-    private Position above(Position pos){
-        return new Position(pos.col(), pos.row() -1, board.getBoardSize());
+        clearMatch(matchCopy);
     }
 
     private void fallDownTo(Position pos, Position bottom){
         if(pos.row() == 0) return;
 
-        Position upPos = above(pos);
-        Candy current = board.getCellAtPosition(pos);
-        Candy up = board.getCellAtPosition(upPos);
-        if(current instanceof EmptyCandy && !(up instanceof EmptyCandy)){
-            board.replaceCellAtPosition(bottom, up);
+        Position upPos = pos.above();
+        Candy currentCandy = board.getCellAtPosition(pos);
+        Candy upCandy = board.getCellAtPosition(upPos);
+        //als pos een gat is en candy erboven niet, laat candy vallen naar bottom
+        //bottom gaat 1 omhoog
+
+        if(currentCandy instanceof EmptyCandy && !(upCandy instanceof EmptyCandy)){
+            board.replaceCellAtPosition(bottom, upCandy);
             board.replaceCellAtPosition(upPos, new EmptyCandy());
-            bottom = above(bottom);
+            bottom = bottom.above();
         }
+        //als boven pos geen candy is, valt niks, dus bottom blijft staan
+        //volgend candy zal dus zover mogelijk vallen omdat bottom zo laag mogelijk blijft staan
         fallDownTo(upPos, bottom);
     }
 
