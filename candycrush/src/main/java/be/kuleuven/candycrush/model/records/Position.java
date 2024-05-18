@@ -19,6 +19,12 @@ public record Position(int col, int row, BoardSize boardSize) {
     public Position above(){
         return new Position(col, row-1, boardSize);
     }
+    public Position right(){
+        return new Position(col+1, row, boardSize);
+    }
+    public Position below(){
+        return new Position(col, row+1, boardSize);
+    }
 
     public int toIndex(){
         return row * boardSize().cols() + col;
@@ -30,8 +36,11 @@ public record Position(int col, int row, BoardSize boardSize) {
         return new Position(col, row, size);
     }
 
-    boolean isLastColumn(){
+    public boolean isLastColumn(){
         return col == boardSize().cols() - 1;
+    }
+    public boolean isLastRow(){
+        return row == boardSize().rows() - 1;
     }
 
     public Iterable<Position> neighborPositions(){
