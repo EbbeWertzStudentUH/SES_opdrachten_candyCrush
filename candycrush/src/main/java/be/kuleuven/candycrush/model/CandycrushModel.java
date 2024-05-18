@@ -183,4 +183,19 @@ public class CandycrushModel {
         fallDownTo(upPos, bottom);
     }
 
+
+
+    private boolean matchAfterSwitch(Position pos1, Position pos2){
+        switchCandies(pos1, pos2);
+        boolean match = !findAllMatches().isEmpty();
+        switchCandies(pos1, pos2);
+        return match;
+    }
+    private void switchCandies(Position pos1, Position pos2){
+        Candy candy1 = board.getCellAtPosition(pos1);
+        Candy candy2 = board.getCellAtPosition(pos2);
+        board.replaceCellAtPosition(pos1, candy2);
+        board.replaceCellAtPosition(pos2, candy1);
+    }
+
 }
